@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+// import { useRef, useState } from "react";
+import { useState } from "react";
 
 function TodoForm({onAddTodo}) {
 
-  const inputRef = useRef();
+  // const inputRef = useRef();
   const [workingTodoTitle, setWorkingTodoTitle] = useState("");
 
   const handleAddTodo = (event) => {
@@ -21,7 +22,7 @@ function TodoForm({onAddTodo}) {
       <form onSubmit = {handleAddTodo}>
         <label htmlFor = "todoTitle">Todo</label>
         <input
-          ref = {inputRef}
+          // ref = {inputRef}
           type = "text"
           id = "todoTitle"
           name = "todoTitle"
