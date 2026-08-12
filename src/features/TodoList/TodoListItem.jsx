@@ -22,10 +22,14 @@ function TodoListItem({todo, onCompleteTodo, onUpdateTodo}){
         }
 
         if(!isEditing) return;
-
         if(!isValidTodoTitle(workingTitle)) return;
 
-        onUpdateTodo({ ...todo, title: workingTitle.trim() });
+        const updateTodo = {
+            ...todo,
+            title: workingTitle.trim()
+        };
+
+        onUpdateTodo(updateTodo);
         setIsEditing(false);
     }
 

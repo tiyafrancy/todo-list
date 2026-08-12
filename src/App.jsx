@@ -32,7 +32,7 @@ function App() {
 
   function updateTodo(editedTodo) {
     const updatedTodos = todoList.map((todo) =>
-    todo.id === editedTodo.id ? { ...editedTodo } : todo
+    todo.id === editedTodo.id ? { ...todo, ...editedTodo } : todo
   );
   setTodoList(updatedTodos);
   }
