@@ -22,17 +22,6 @@ function TodoForm({onAddTodo}) {
 
     return (
       <form onSubmit = {handleAddTodo}>
-        {/* <label htmlFor = "todoTitle">Todo</label>
-        <input
-          // ref = {inputRef}
-          type = "text"
-          id = "todoTitle"
-          name = "todoTitle"
-          placeholder = {"Todo text"}
-          value={workingTodoTitle}
-          onChange={(event) => setWorkingTodoTitle(event.target.value)}
-          required
-        /> */}
         <TextInputWithLabel 
           elementId="todoTitle"
           labelText="Todo"

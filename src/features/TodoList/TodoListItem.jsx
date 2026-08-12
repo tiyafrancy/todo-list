@@ -7,18 +7,20 @@ function TodoListItem({todo, onCompleteTodo, onUpdateTodo}){
     const [isEditing, setIsEditing] = useState(false);
     const [workingTitle, setWorkingTitle] = useState(todo.title);
 
+    function handleEdit(event){
+        setWorkingTitle(event.target.value);
+    }
+
     function handleCancel(){
         setWorkingTitle(todo.title);
         setIsEditing(false);
     }
 
-    function handleEdit(event){
-        setWorkingTitle(event.target.value);
-    }
-
     function handleUpdate(event){
-        event.preventDefault();
-        
+        if(event){
+            event.preventDefault();
+        }
+
         if(!isEditing) return;
 
         if(!isValidTodoTitle(workingTitle)) return;
@@ -41,7 +43,11 @@ function TodoListItem({todo, onCompleteTodo, onUpdateTodo}){
                         <button type="button" onClick={handleCancel}>
                             Cancel
                         </button>
-                        <button type="button" onClick={handleUpdate} disabled={!isValidTodoTitle(workingTitle)}>
+                        <button 
+                            type="button" 
+                            onClick={handleUpdate} 
+                            disabled={!isValidTodoTitle(workingTitle)}
+                        >
                             Update
                         </button>
                     </>
@@ -59,12 +65,6 @@ function TodoListItem({todo, onCompleteTodo, onUpdateTodo}){
                     </>
                 )}
             </form>
-            {/* <input
-                type="checkbox"
-                checked={todo.isCompleted}
-                onChange={() => onCompleteTodo(todo.id)}
-            />
-            {todo.title} */}
         </li>
     );
 }
