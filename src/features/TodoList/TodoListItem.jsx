@@ -17,10 +17,13 @@ function TodoListItem({todo, onCompleteTodo, onUpdateTodo}){
     }
 
     function handleUpdate(event){
+        event.preventDefault();
+        
         if(!isEditing) return;
 
-        event.preventDefault();
-        onUpdateTodo({ ...todo, title: workingTitle });
+        if(!isValidTodoTitle(workingTitle)) return;
+
+        onUpdateTodo({ ...todo, title: workingTitle.trim() });
         setIsEditing(false);
     }
 
