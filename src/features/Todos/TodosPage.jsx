@@ -11,7 +11,7 @@ function TodosPage({token}) {
 
   useEffect(() => {
 
-    if(!token) return;
+    // if(!token) return;
 
     async function fetchTodos() {
         setIsTodoListLoading(true);
@@ -38,7 +38,7 @@ function TodosPage({token}) {
             }
 
             const data = await response.json();
-            setTodoList(data.todos || data);
+            setTodoList(data.tasks || []);
         } catch (err) {
             setError(err.message || 'An error occured while fetching todos');
         } finally {
@@ -46,7 +46,11 @@ function TodosPage({token}) {
         }
     }
 
-    fetchTodos();
+    if (token) {
+
+        fetchTodos();
+    }
+
   }, [token]);
 
   async function addTodo(todoTitle){
@@ -123,7 +127,8 @@ function TodosPage({token}) {
         }
     } catch (err) {
 
-        setTodoList(todoList);
+        setTodoList((previous) => previous.map((todo) => (todo.id === id ? originalTodo : todo))
+        );
         setError(err.message || 'Could not complete task. Please try again.');
     }
   }

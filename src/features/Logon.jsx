@@ -10,6 +10,7 @@ function Logon({onSetEmail, onSetToken}) {
 
         event.preventDefault();
         setIsLoggingOn(true);
+        setAuthError('');
 
         try {
             const response = await fetch('/api/users/logon', {
@@ -42,7 +43,11 @@ function Logon({onSetEmail, onSetToken}) {
 
     return(
         <form onSubmit={handleSubmit}>
-            {authError}
+            {authError && (
+                <div>
+                    <p>{authError}</p>
+                </div>
+            )}
 
             <div>
                 <label htmlFor="email">Email:</label>
