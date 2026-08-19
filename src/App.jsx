@@ -14,7 +14,7 @@ function App() {
       <Header email={email} token={token} onSetToken={setToken} onSetEmail={setEmail} />
 
       {token ? (
-        <TodosPage toekn={token} />
+        <TodosPage token={token} />
       ) : (
         <Logon onSetEmail={setEmail} onSetToken={setToken} />
       )}

@@ -145,7 +145,7 @@ function TodosPage({token}) {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': token,
             },
-            credential: 'include',
+            credentials: 'include',
             body: JSON.stringify({
                 title: editedTodo.title,
                 isCompleted: editedTodo.isCompleted,
