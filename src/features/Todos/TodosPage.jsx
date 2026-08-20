@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import './App.css';
 import TodoList from './TodoList/TodoList.jsx';
 import TodoForm from './TodoForm.jsx';
 
@@ -11,18 +10,14 @@ function TodosPage({token}) {
 
   useEffect(() => {
 
-    // if(!token) return;
+    if(!token) return;
 
     async function fetchTodos() {
         setIsTodoListLoading(true);
         setError('');
 
         try {
-            const params = new URLSearchParams({
-                limit: 100,
-            });
-
-            const response = await fetch(`/api/tasks?${params}`, {
+            const response = await fetch('/api/tasks', {
                 headers: {
                     'X-CSRF-TOKEN': token,
                 },
@@ -46,10 +41,7 @@ function TodosPage({token}) {
         }
     }
 
-    if (token) {
-
-        fetchTodos();
-    }
+    fetchTodos();
 
   }, [token]);
 
