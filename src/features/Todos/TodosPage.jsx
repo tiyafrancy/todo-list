@@ -25,7 +25,7 @@ function TodosPage({token}) {
             });
 
             if(response.status === 401) {
-                throw new Error('unauthorised');
+                throw new Error('Unauthorized access');
             }
 
             if(!response.ok) {
@@ -46,6 +46,8 @@ function TodosPage({token}) {
   }, [token]);
 
   async function addTodo(todoTitle){
+
+    setError('');
 
     const newTodo = {
       id : Date.now(),
@@ -76,8 +78,7 @@ function TodosPage({token}) {
         }
 
         const savedTodo = await response.json();
-        setTodoList((previous) => previous.map((todo) => (todo.id === newTodo.id ? savedTodo : todo))
-        );
+        setTodoList((previous) => previous.map((todo) => (todo.id === newTodo.id ? savedTodo : todo)));
     } catch (err) {
 
         setTodoList((previous) => previous.filter((todo) => todo.id !== newTodo.id));
@@ -93,15 +94,6 @@ function TodosPage({token}) {
     if (!originalTodo) return;
 
     setTodoList((previous) => previous.map((todo) => (todo.id === id ? { ...todo, isCompleted: true } : todo)));
-
-    // const updatedTodoList = todoList.map((todo) => {
-    //   if(todo.id === id){
-    //     return {...todo, isCompleted: true};
-    //   }
-    //   return todo;
-    // });
-
-    // setTodoList(updatedTodoList);
 
     try {
 
@@ -136,11 +128,6 @@ function TodosPage({token}) {
     if (!originalTodo) return;
 
     setTodoList((previous) => previous.map((todo) => (todo.id === editedTodo.id ? { ...todo, ...editedTodo }: todo)));
-
-    // const updatedTodos = todoList.map((todo) =>
-    // todo.id === editedTodo.id ? { ...todo, ...editedTodo } : todo
-    // );
-    // setTodoList(updatedTodos);
 
     try {
 

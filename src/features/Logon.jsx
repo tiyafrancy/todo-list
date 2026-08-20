@@ -26,7 +26,7 @@ function Logon({onSetEmail, onSetToken}) {
                 onSetEmail(data.name);
                 onSetToken(data.csrfToken);
             } else {
-                setAuthError(`Authentication failed: ${data?.message}`);
+                setAuthError(`Authentication failed: ${data?.message || 'Invalid credentials'}`);
             }
 
         }catch (error) {
