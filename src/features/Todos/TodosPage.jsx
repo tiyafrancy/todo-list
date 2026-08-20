@@ -17,7 +17,7 @@ function TodosPage({token}) {
         setError('');
 
         try {
-            const response = await fetch('/api/tasks', {
+            const response = await fetch('/api/tasks?limit=100', {
                 headers: {
                     'X-CSRF-TOKEN': token,
                 },
@@ -35,7 +35,7 @@ function TodosPage({token}) {
             const data = await response.json();
             setTodoList(data.tasks || []);
         } catch (err) {
-            setError(err.message || 'An error occured while fetching todos');
+            setError(err.message || 'An error occurred while fetching todos');
         } finally {
             setIsTodoListLoading(false);
         }
