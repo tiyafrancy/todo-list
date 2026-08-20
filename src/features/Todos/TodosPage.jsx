@@ -87,17 +87,21 @@ function TodosPage({token}) {
 
   async function completeTodo(id) {
 
+    setError('');
+
     const originalTodo = todoList.find((todo) => todo.id === id);
     if (!originalTodo) return;
 
-    const updatedTodoList = todoList.map((todo) => {
-      if(todo.id === id){
-        return {...todo, isCompleted: true};
-      }
-      return todo;
-    });
+    setTodoList((previous) => previous.map((todo) => (todo.id === id ? { ...todo, isCompleted: true } : todo)));
 
-    setTodoList(updatedTodoList);
+    // const updatedTodoList = todoList.map((todo) => {
+    //   if(todo.id === id){
+    //     return {...todo, isCompleted: true};
+    //   }
+    //   return todo;
+    // });
+
+    // setTodoList(updatedTodoList);
 
     try {
 
@@ -119,20 +123,24 @@ function TodosPage({token}) {
         }
     } catch (err) {
 
-        setTodoList((previous) => previous.map((todo) => (todo.id === id ? originalTodo : todo))
-        );
+        setTodoList((previous) => previous.map((todo) => (todo.id === id ? originalTodo : todo)));
         setError(err.message || 'Could not complete task. Please try again.');
     }
   }
 
   async function updateTodo(editedTodo) {
 
-    const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
+    setError('');
 
-    const updatedTodos = todoList.map((todo) =>
-    todo.id === editedTodo.id ? { ...todo, ...editedTodo } : todo
-    );
-    setTodoList(updatedTodos);
+    const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
+    if (!originalTodo) return;
+
+    setTodoList((previous) => previous.map((todo) => (todo.id === editedTodo.id ? { ...todo, ...editedTodo }: todo)));
+
+    // const updatedTodos = todoList.map((todo) =>
+    // todo.id === editedTodo.id ? { ...todo, ...editedTodo } : todo
+    // );
+    // setTodoList(updatedTodos);
 
     try {
 
@@ -155,10 +163,8 @@ function TodosPage({token}) {
         }
     } catch (err) {
 
-        if (originalTodo) {
-            setTodoList((previous) => previous.map((todo) => todo.id === editedTodo.id ? originalTodo : todo)
-            );
-        }
+        setTodoList((previous) => previous.map((todo) => todo.id === editedTodo.id ? originalTodo : todo));
+        
         setError(err.message || 'Could not update todo. Please try again.');
     }
   }
@@ -178,13 +184,11 @@ function TodosPage({token}) {
 
       <TodoForm onAddTodo={addTodo} />
 
-      {!isTodoListLoading && (
         <TodoList 
         todoList={todoList} 
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
-      />
-      )} 
+        />
     </div>
   );
 }

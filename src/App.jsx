@@ -18,7 +18,6 @@ function App() {
       ) : (
         <Logon onSetEmail={setEmail} onSetToken={setToken} />
       )}
-
     </div>
   );
 }
