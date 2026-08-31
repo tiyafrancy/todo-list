@@ -35,11 +35,10 @@ function TodosPage({token}) {
         setIsTodoListLoading(true);
         setError('');
 
-        const paramsObject = new URLSearchParams({
+        const paramsObject = {
             sortBy,
             sortDirection,
-            limit: 100,
-        });
+        };
 
         if (debouncedFilterTerm) {
 
