@@ -81,7 +81,7 @@ function TodosPage({token}) {
 
     fetchTodos();
 
-  }, [token, sortBy, sortDirection, debouncedFilterTerm, setFilterError]);
+  }, [token, sortBy, sortDirection, debouncedFilterTerm]);
 
   async function addTodo(todoTitle){
 
