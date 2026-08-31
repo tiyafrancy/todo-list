@@ -68,7 +68,7 @@ function TodosPage({token}) {
             setTodoList(data.tasks || []);
             setFilterError('');
         } catch (err) {
-            if (debouncedFilterTerm || sortBy !== 'createAt' || sortDirection !== 'desc') {
+            if (debouncedFilterTerm || sortBy !== 'createdAt' || sortDirection !== 'desc') {
                 setFilterError(`Error filtering/sorting todos: ${err.message}`);
             }
             else {
