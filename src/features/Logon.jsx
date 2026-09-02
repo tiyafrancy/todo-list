@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
-function Logon({onSetEmail, onSetToken}) {
+function Logon() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authError, setAuthError] = useState('');
     const [isLoggingOn, setIsLoggingOn] = useState(false);
+
+    const { login } = useAuth();
 
     async function handleSubmit(event) {
 
@@ -13,20 +16,26 @@ function Logon({onSetEmail, onSetToken}) {
         setAuthError('');
 
         try {
-            const response = await fetch('/api/users/logon', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ email, password })
-              });
+            // const response = await fetch('/api/users/logon', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     credentials: 'include',
+            //     body: JSON.stringify({ email, password })
+            //   });
 
-            const data = await response.json();
+            // const data = await response.json();
 
-            if (response.status === 200 && data.name && data.csrfToken) {
-                onSetEmail(data.name);
-                onSetToken(data.csrfToken);
-            } else {
-                setAuthError(`Authentication failed: ${data?.message || 'Invalid credentials'}`);
+            // if (response.status === 200 && data.name && data.csrfToken) {
+            //     onSetEmail(data.name);
+            //     onSetToken(data.csrfToken);
+            // } else {
+            //     setAuthError(`Authentication failed: ${data?.message || 'Invalid credentials'}`);
+            // }
+
+            const result = await login(email, password);
+
+            if (!result.success) {
+                setAuthError(result.error);
             }
 
         }catch (error) {

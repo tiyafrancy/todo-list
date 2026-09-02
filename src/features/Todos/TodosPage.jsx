@@ -4,13 +4,14 @@ import TodoForm from './TodoForm.jsx';
 import SortBy from '../../shared/SortBy.jsx';
 import useDebounce from '../../utils/useDebounce.js'
 import FilterInput from '../../shared/FilterInput.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 import {
     todoReducer,
     initialTodoState,
     TODO_ACTIONS,
 } from '../../reducers/todoReducer.js';
 
-function TodosPage({token}) {
+function TodosPage() {
 
 //   const [todoList, setTodoList] = useState([]);
 //   const [error, setError] = useState('');
@@ -21,6 +22,7 @@ function TodosPage({token}) {
 //   const [filterError, setFilterError] = useState('');
 //   const [dataVersion, setDataVersion] = useState(0);
 
+  const { token } = useAuth();  
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
 
   const {
