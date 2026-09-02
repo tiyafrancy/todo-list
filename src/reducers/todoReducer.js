@@ -66,12 +66,19 @@ export function todoReducer(state, action) {
                 filterError: '',
             };
 
-        case TODO_ACTIONS.FETCH_ERROR:
+        case TODO_ACTIONS.FETCH_ERROR: {
+
+        const errorMessage = typeof action.payload == 'object' && action.payload !== null ? action.payload.message : action.payload;
+
+        const isFilterError = typeof action.payload === 'object' && action.payload?.isFilterError;
+
             return {
                 ...state,
                 isTodoListLoading: false,
-                filterError: action.payload.message,
+                error: isFilterError ? '' : (errorMessage || 'An error while fetching todos'),
+                filterError: isFilterError ? (errorMessage || 'Error filtering/sorting todos') : '',
             };
+        }
 
         // Add todo operations
         case TODO_ACTIONS.ADD_TODO_START:
