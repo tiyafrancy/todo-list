@@ -15,6 +15,7 @@ export function AuthProvider({ children }) {
 
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const login = async (userEmail, password) => {
         try {
@@ -56,6 +57,8 @@ export function AuthProvider({ children }) {
             return { success: true };
         }
 
+        setIsLoggingOut(true);
+
         try {
             
             const options = {
@@ -84,6 +87,8 @@ export function AuthProvider({ children }) {
                 success: false,
                 error: 'Network error during logout',
             };
+        } finally {
+            setIsLoggingOut(false);
         }
     };
 
@@ -91,6 +96,7 @@ export function AuthProvider({ children }) {
         email,
         token,
         isAuthenticated: !!token,
+        isLoggingOut,
         login,
         logout,
     };
