@@ -70,6 +70,8 @@ export function AuthProvider({ children }) {
             const res = await fetch('/api/user/logoff', options);
 
             if (res.ok) {
+                setEmail('');
+                setToken('');
                 return { success: true };
             } else {
                 return {
@@ -87,6 +89,7 @@ export function AuthProvider({ children }) {
             setEmail('');
             setToken('');
         }
+
     };
 
     const value = {
