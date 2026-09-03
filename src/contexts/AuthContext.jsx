@@ -15,11 +15,11 @@ export function AuthProvider({ children }) {
 
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
-    const [isLoggingOn, setIsLoggingOn] = useState(false);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    // const [isLoggingOn, setIsLoggingOn] = useState(false);
+    // const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const login = async (userEmail, password) => {
-        setIsLoggingOn(true);
+        // setIsLoggingOn(true);
         try {
             const options = {
                 method: 'POST',
@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
 
             return {
                 success: false,
-                error: `Authentication failed: ${data?.message}`,
+                error: `Authentication failed: ${data?.message || 'Invalid response'}`,
             };
             }
         } catch {
@@ -48,9 +48,7 @@ export function AuthProvider({ children }) {
                 success: false,
                 error: 'Network error during login',
             };
-        } finally {
-            setIsLoggingOn(false);
-        }
+        } 
     };
 
     const logout = async() => {
@@ -61,7 +59,7 @@ export function AuthProvider({ children }) {
             return { success: true };
         }
 
-        setIsLoggingOut(true);
+        // setIsLoggingOut(true);
 
         try {
             
@@ -91,8 +89,6 @@ export function AuthProvider({ children }) {
                 success: false,
                 error: 'Network error during logout',
             };
-        } finally {
-            setIsLoggingOut(false);
         }
     };
 
@@ -100,8 +96,8 @@ export function AuthProvider({ children }) {
         email,
         token,
         isAuthenticated: !!token,
-        isLoggingOn,
-        isLoggingOut,
+        // isLoggingOn,
+        // isLoggingOut,
         login,
         logout,
     };

@@ -166,7 +166,7 @@ function TodosPage() {
 
     dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_START,
-        payload: id,
+        payload: originalTodo,
     });
 
     try {
