@@ -4,7 +4,7 @@ const AuthContext = createContext();
 
 export function useAuth() {
     const context = useContext(AuthContext);
-    // console.log('Auth context:', context);
+    
     if(!context) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
@@ -15,9 +15,11 @@ export function AuthProvider({ children }) {
 
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
+    const [isLoggingOn, setIsLoggingOn] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const login = async (userEmail, password) => {
+        setIsLoggingOn(true);
         try {
             const options = {
                 method: 'POST',
@@ -46,6 +48,8 @@ export function AuthProvider({ children }) {
                 success: false,
                 error: 'Network error during login',
             };
+        } finally {
+            setIsLoggingOn(false);
         }
     };
 
@@ -96,6 +100,7 @@ export function AuthProvider({ children }) {
         email,
         token,
         isAuthenticated: !!token,
+        isLoggingOn,
         isLoggingOut,
         login,
         logout,

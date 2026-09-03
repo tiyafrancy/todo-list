@@ -22,15 +22,12 @@ export const TODO_ACTIONS = {
     UPDATE_TODO_ERROR: 'UPDATE_TODO_ERROR',
 
     // UI operations
-    SET_SORT_BY: 'SET_SORT_BY',
-    SET_SORT_DIRECTION: 'SET_SORT_DIRECTION',
+    SET_SORT: 'SET_SORT',
     SET_FILTER: 'SET_FILTER',
 
     CLEAR_ERROR: 'CLEAR_ERROR',
     CLEAR_FILTER_ERROR: 'CLEAR_FILTER_ERROR',
     RESET_FILTERS: 'RESET_FILTERS',
-
-    INVALIDATE_CACHE: 'INVALIDATE_CACHE',
 
 };
 
@@ -68,15 +65,11 @@ export function todoReducer(state, action) {
 
         case TODO_ACTIONS.FETCH_ERROR: {
 
-        const errorMessage = typeof action.payload == 'object' && action.payload !== null ? action.payload.message : action.payload;
-
-        const isFilterError = typeof action.payload === 'object' && action.payload?.isFilterError;
-
             return {
                 ...state,
                 isTodoListLoading: false,
-                error: isFilterError ? '' : (errorMessage || 'An error while fetching todos'),
-                filterError: isFilterError ? (errorMessage || 'Error filtering/sorting todos') : '',
+                error: action.payload.isFilterError ? '' : action.payload.message,
+                filterError: action.payload.isFilterError ? action.payload.message : '',
             };
         }
 
@@ -149,13 +142,8 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.SET_SORT_BY:
             return {
                 ...state,
-                sortBy: action.payload,
-            };
-
-        case TODO_ACTIONS.SET_SORT_DIRECTION:
-            return {
-                ...state,
-                sortDirection: action.payload,
+                sortBy: action.payload.sortBy ?? state.sortBy,
+                sortDirection: action.payload.sortDirection ?? state.sortDirection,
             };
 
         case TODO_ACTIONS.SET_FILTER:
@@ -181,7 +169,7 @@ export function todoReducer(state, action) {
                 ...state,
                 filterTerm: '',
                 sortBy: 'createdAt',
-                sortDirection: 'desc',
+                sortDirection: 'asc',
                 filterError: '',
             };
 
