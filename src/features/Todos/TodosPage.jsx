@@ -24,13 +24,12 @@ function TodosPage() {
     sortDirection,
     filterTerm,
     filterError,
-    dataVersion,
+    // dataVersion,
   } = state;
 
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
 
   const handleFilterChange = (newTerm) => {
-    // setFilterTerm(newTerm);
     dispatch({
         type: TODO_ACTIONS.SET_FILTER,
         payload: newTerm,
@@ -81,22 +80,23 @@ function TodosPage() {
             });
 
         } catch (err) {
-            if (debouncedFilterTerm || sortBy !== 'createdAt' || sortDirection !== 'asc') {
+            const isFilterOrSortActive = debouncedFilterTerm || sortBy !== 'createdAt' || sortDirection !== 'asc';
 
                 dispatch({
                     type: TODO_ACTIONS.FETCH_ERROR,
                     payload: {
-                        message: `Error filtering/sorting todos: ${err.message}`,
+                        message: isFilterOrSortActive ? `Error filtering/sorting todos: ${err.message}` : err.message || 'An error occurred while fetching todos',
+                        isFilterError: isFilterOrSortActive,
                     }
                 });
-            }
-            else {
+            // }
+            // else {
 
-                dispatch({
-                    type: TODO_ACTIONS.FETCH_ERROR,
-                    payload: err.message || 'An error occurred while fetching todos',
-                });
-            }
+            //     dispatch({
+            //         type: TODO_ACTIONS.FETCH_ERROR,
+            //         payload: err.message || 'An error occurred while fetching todos',
+            //     });
+            // }
             
         }
     }
@@ -160,7 +160,6 @@ function TodosPage() {
   }
 
   async function completeTodo(id) {
-
 
     const originalTodo = todoList.find((todo) => todo.id === id);
     if (!originalTodo) return;
@@ -301,7 +300,7 @@ function TodosPage() {
         todoList={todoList} 
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
-        dataVersion={dataVersion}
+        // dataVersion={dataVersion}
         />
     </div>
   );
