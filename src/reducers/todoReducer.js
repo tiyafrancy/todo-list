@@ -117,7 +117,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 todoList: state.todoList.map((todo) => todo.id === action.payload.originalTodo.id ? action.payload.originalTodo : todo),
-                error: action.payload.message || 'Could not complete task. Please try agian.',
+                error: action.payload.message || 'Could not complete task. Please try again.',
             };
 
         // Update todo operations
@@ -178,7 +178,6 @@ export function todoReducer(state, action) {
             };
 
         default:
-            throw new Error(`Unknown action type: ${action.type}`);
-            // return state;
+            throw new Error(`Unhandled action type: ${action.type}`);
     }
 }

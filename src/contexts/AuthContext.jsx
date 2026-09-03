@@ -15,11 +15,8 @@ export function AuthProvider({ children }) {
 
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
-    // const [isLoggingOn, setIsLoggingOn] = useState(false);
-    // const [isLoggingOut, setIsLoggingOut] = useState(false);
-
+    
     const login = async (userEmail, password) => {
-        // setIsLoggingOn(true);
         try {
             const options = {
                 method: 'POST',
@@ -59,8 +56,6 @@ export function AuthProvider({ children }) {
             return { success: true };
         }
 
-        // setIsLoggingOut(true);
-
         try {
             
             const options = {
@@ -96,8 +91,6 @@ export function AuthProvider({ children }) {
         email,
         token,
         isAuthenticated: !!token,
-        // isLoggingOn,
-        // isLoggingOut,
         login,
         logout,
     };

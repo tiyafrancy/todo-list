@@ -89,16 +89,7 @@ function TodosPage() {
                         isFilterError: isFilterOrSortActive,
                     }
                 });
-            // }
-            // else {
-
-            //     dispatch({
-            //         type: TODO_ACTIONS.FETCH_ERROR,
-            //         payload: err.message || 'An error occurred while fetching todos',
-            //     });
-            // }
-            
-        }
+            }
     }
 
     fetchTodos();
