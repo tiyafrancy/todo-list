@@ -39,7 +39,7 @@ export const initialTodoState = {
     sortDirection: 'asc',
     filterTerm: '',
     filterError: '',
-    // dataVersion: 0,
+    dataVersion: 0,
 };
 
 export function todoReducer(state, action) {
@@ -89,7 +89,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 todoList: state.todoList.map((todo) => todo.id === action.payload.tempId ? action.payload.savedTodo : todo),
-                // dataVersion: state.dataVersion + 1,
+                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.ADD_TODO_ERROR:
@@ -110,7 +110,7 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
             return {
                 ...state,
-                // dataVersion: state.dataVersion + 1,
+                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_ERROR:
@@ -131,7 +131,7 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
             return {
                 ...state,
-                // dataVersion: state.dataVersion + 1,
+                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.UPDATE_TODO_ERROR:

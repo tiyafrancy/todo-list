@@ -24,7 +24,7 @@ function TodosPage() {
     sortDirection,
     filterTerm,
     filterError,
-    // dataVersion,
+    dataVersion,
   } = state;
 
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
@@ -300,7 +300,7 @@ function TodosPage() {
         todoList={todoList} 
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
-        // dataVersion={dataVersion}
+        dataVersion={dataVersion}
         />
     </div>
   );
