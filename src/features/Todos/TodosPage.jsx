@@ -94,7 +94,7 @@ function TodosPage() {
 
     fetchTodos();
 
-  }, [token, sortBy, sortDirection, debouncedFilterTerm]);
+  }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
 
   async function addTodo(todoTitle){
 

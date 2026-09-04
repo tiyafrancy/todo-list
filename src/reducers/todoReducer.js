@@ -82,6 +82,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 error: '',
+                filterError: '',
                 todoList: [action.payload, ...state.todoList],
             };
 
@@ -116,8 +117,9 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.COMPLETE_TODO_ERROR:
             return {
                 ...state,
+                error: '',
+                filterError: '',
                 todoList: state.todoList.map((todo) => todo.id === action.payload.originalTodo.id ? action.payload.originalTodo : todo),
-                error: action.payload.message || 'Could not complete task. Please try again.',
             };
 
         // Update todo operations
@@ -125,6 +127,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 error: '',
+                filterError: '',
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, ...action.payload } : todo),
             };
 
@@ -148,12 +151,16 @@ export function todoReducer(state, action) {
                 ...state,
                 sortBy: action.payload.sortBy ?? state.sortBy,
                 sortDirection: action.payload.sortDirection ?? state.sortDirection,
+                error: '',
+                filterError: '',
             };
 
         case TODO_ACTIONS.SET_FILTER:
             return {
                 ...state,
                 filterTerm: action.payload,
+                error: '',
+                filterError: '',
             };
 
         case TODO_ACTIONS.CLEAR_ERROR:
@@ -174,6 +181,7 @@ export function todoReducer(state, action) {
                 filterTerm: '',
                 sortBy: 'createdAt',
                 sortDirection: 'asc',
+                error: '',
                 filterError: '',
             };
 
