@@ -61,6 +61,7 @@ export function todoReducer(state, action) {
                 todoList: action.payload,
                 error: '',
                 filterError: '',
+                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.FETCH_ERROR: {
@@ -183,6 +184,7 @@ export function todoReducer(state, action) {
                 sortDirection: 'asc',
                 error: '',
                 filterError: '',
+                dataVersion: state.dataVersion + 1,
             };
 
         default:
