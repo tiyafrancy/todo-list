@@ -90,6 +90,8 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.ADD_TODO_SUCCESS:
             return {
                 ...state,
+                error: '',
+                filterError: '',
                 todoList: state.todoList.map((todo) => todo.id === action.payload.tempId ? action.payload.savedTodo : todo),
                 dataVersion: state.dataVersion + 1,
             };
@@ -97,6 +99,7 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.ADD_TODO_ERROR:
             return {
                 ...state,
+                filterError: '',
                 todoList: state.todoList.filter((todo) => todo.id !== action.payload.tempId),
                 error: action.payload.message || 'Could not save todo. Please try again.',
             };
@@ -106,12 +109,15 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 error: '',
+                filterError: '',
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, isCompleted: true } : todo),
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
             return {
                 ...state,
+                error: '',
+                filterError: '',
                 dataVersion: state.dataVersion + 1,
             };
 
@@ -135,12 +141,15 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
             return {
                 ...state,
+                error: '',
+                filterError: '',
                 dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.UPDATE_TODO_ERROR:
             return {
                 ...state,
+                filterError: '',
                 todoList: state.todoList.map((todo) => todo.id === action.payload.originalTodo.id ? action.payload.originalTodo : todo),
                 error: action.payload.message || 'Could not update todo. Please try again.',
             };
