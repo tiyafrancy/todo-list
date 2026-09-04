@@ -40,6 +40,8 @@ function TodosPage() {
 
     if(!token) return;
 
+    let isSubscribed = true;
+
     async function fetchTodos() {
 
         dispatch({ type: TODO_ACTIONS.FETCH_START });
@@ -74,13 +76,15 @@ function TodosPage() {
 
             const data = await response.json();
 
-            dispatch({
-                type: TODO_ACTIONS.FETCH_SUCCESS,
-                payload: data.tasks || [],
-            });
-
+            if (isSubscribed) {
+                dispatch({
+                    type: TODO_ACTIONS.FETCH_SUCCESS,
+                    payload: data.tasks || [],
+                });
+            }
         } catch (err) {
-            const isFilterOrSortActive = debouncedFilterTerm || sortBy !== 'createdAt' || sortDirection !== 'asc';
+            if (isSubscribed){
+                const isFilterOrSortActive = Boolean(debouncedFilterTerm || sortBy !== 'createdAt' || sortDirection !== 'asc');
 
                 dispatch({
                     type: TODO_ACTIONS.FETCH_ERROR,
@@ -90,9 +94,14 @@ function TodosPage() {
                     }
                 });
             }
+        }
     }
 
     fetchTodos();
+
+    return () => {
+        isSubscribed = false;
+    };
 
   }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
 
