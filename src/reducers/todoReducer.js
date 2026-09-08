@@ -61,7 +61,6 @@ export function todoReducer(state, action) {
                 todoList: action.payload.todos,
                 error: '',
                 filterError: '',
-                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.FETCH_ERROR: {
@@ -150,13 +149,13 @@ export function todoReducer(state, action) {
                 ...state,
                 sortBy: action.payload.sortBy,
                 sortDirection: action.payload.sortDirection,
-                dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.SET_FILTER:
             return {
                 ...state,
                 filterTerm: action.payload.filterTerm,
+                filterError: '',
             };
 
         case TODO_ACTIONS.CLEAR_ERROR:

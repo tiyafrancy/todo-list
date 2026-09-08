@@ -69,6 +69,9 @@ export function AuthProvider({ children }) {
             const res = await fetch('/api/user/logoff', options);
 
             if (!res.ok) throw new Error('Logout failed');
+
+                setEmail('');
+                setToken('');
                 return { success: true };
 
         } catch(error) {
