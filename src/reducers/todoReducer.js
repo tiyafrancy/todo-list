@@ -92,7 +92,6 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.ADD_TODO_ERROR:
             return {
                 ...state,
-                isTodoListLoading: false,
                 todoList: state.todoList.filter((todo) => todo.id !== action.payload.tempId),
                 error: action.payload.message,
             };
@@ -116,7 +115,6 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.COMPLETE_TODO_ERROR:
             return {
                 ...state,
-                isTodoListLoading: false,
                 error: action.payload.message,
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, isCompleted: false } : todo),
             };
@@ -140,7 +138,6 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.UPDATE_TODO_ERROR:
             return {
                 ...state,
-                isTodoListLoading: false,
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...action.payload.originalTodo } : todo),
                 error: action.payload.message,
             };
