@@ -94,6 +94,7 @@ export function todoReducer(state, action) {
                 ...state,
                 todoList: state.todoList.filter((todo) => todo.id !== action.payload.tempId),
                 error: action.payload.message,
+                filterError: '',
             };
 
         // Complete todo operations
@@ -116,6 +117,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 error: action.payload.message,
+                filterError: '',
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...action.payload.originalTodo } : todo),
             };
 
@@ -140,6 +142,7 @@ export function todoReducer(state, action) {
                 ...state,
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...action.payload.originalTodo } : todo),
                 error: action.payload.message,
+                filterError: '',
             };
 
         // UI operations
