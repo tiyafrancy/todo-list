@@ -137,7 +137,7 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.UPDATE_TODO_ERROR:
             return {
                 ...state,
-                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, title: action.payload.originalTodo.title } : todo),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...action.payload.originalTodo } : todo),
                 error: action.payload.message,
             };
 

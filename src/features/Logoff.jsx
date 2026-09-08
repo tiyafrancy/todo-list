@@ -11,15 +11,11 @@ function Logoff() {
         setIsLoggingOff(true);
         setError('');
 
-        try {
-            const result = await logout();
-            if (!result.success) {
-                setError(result.error);
-            }
-
-        } catch (err) {
-            setError('An unexpected error occured.');
-        } finally {
+        const result = await logout();
+        if (result.success) {
+            // Logout successful
+        } else {
+            setError(result.error);
             setIsLoggingOff(false);
         }
 
@@ -27,10 +23,10 @@ function Logoff() {
 
     return (
         <div>
-            {error && <p>{error}</p>}
-            <button onClick={handleLogoff}>
-                Logoff
+            <button onClick={handleLogoff} disabled={isLoggingOff}>
+                {isLoggingOff ? <> Logging off...</> : <>Log Off</>}
             </button>
+            {error && <p>{error}</p>}
         </div>
     );
 }

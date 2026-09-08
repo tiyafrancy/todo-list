@@ -32,7 +32,7 @@ function TodosPage() {
   const handleFilterChange = (newTerm) => {
     dispatch({
         type: TODO_ACTIONS.SET_FILTER,
-        payload: newTerm,
+        payload: {filterTerm: newTerm },
     });
   };
 
@@ -82,7 +82,7 @@ function TodosPage() {
                 type: TODO_ACTIONS.FETCH_ERROR,
                 payload: {
                     message: `Error fetching todos: ${error.message}`,
-                    isFilterError: false,
+                    isFilterError: Boolean(debouncedFilterTerm),
                 }
             });
         }
@@ -129,7 +129,8 @@ function TodosPage() {
         dispatch({
             type: TODO_ACTIONS.ADD_TODO_SUCCESS,
             payload: {
-                tempId: { tempId, data },
+                tempId, 
+                data 
             },
         });
     } catch (err) {
