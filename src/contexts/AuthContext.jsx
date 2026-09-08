@@ -79,9 +79,6 @@ export function AuthProvider({ children }) {
                 success: false,
                 error: error.message,
             };
-        } finally {
-            setEmail('');
-            setToken('');
         }
     };
 
