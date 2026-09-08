@@ -40,8 +40,6 @@ function TodosPage() {
 
     if(!token) return;
 
-    let isSubscribed = true;
-
     async function fetchTodos() {
 
         dispatch({ type: TODO_ACTIONS.FETCH_START });
@@ -56,7 +54,7 @@ function TodosPage() {
             paramsObject.find = debouncedFilterTerm;
         }
 
-        const params = new URLSearchParams(paramsObject);
+        const params = new URLSearchParams(paramsObject).toString();
 
         try {
             const response = await fetch(`/api/tasks?${params}`, {
@@ -75,48 +73,36 @@ function TodosPage() {
             }
 
             const data = await response.json();
-
-            if (isSubscribed) {
-                dispatch({
-                    type: TODO_ACTIONS.FETCH_SUCCESS,
-                    payload: data.tasks || [],
-                });
-            }
+            dispatch({
+                type: TODO_ACTIONS.FETCH_SUCCESS,
+                payload: { todos: data.tasks},
+            });
         } catch (err) {
-            if (isSubscribed){
-                const isFilterOrSortActive = Boolean(debouncedFilterTerm || sortBy !== 'createdAt' || sortDirection !== 'asc');
-
-                dispatch({
-                    type: TODO_ACTIONS.FETCH_ERROR,
-                    payload: {
-                        message: isFilterOrSortActive ? `Error filtering/sorting todos: ${err.message}` : err.message || 'An error occurred while fetching todos',
-                        isFilterError: isFilterOrSortActive,
-                    }
-                });
-            }
+            dispatch({
+                type: TODO_ACTIONS.FETCH_ERROR,
+                payload: {
+                    message: `Error fetching todos: ${error.message}`,
+                    isFilterError: false,
+                }
+            });
         }
     }
-
     fetchTodos();
-
-    return () => {
-        isSubscribed = false;
-    };
 
   }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
 
   async function addTodo(todoTitle){
 
-
+    const tempId = Date.now();
     const newTodo = {
-      id : Date.now(),
+      id : tempId,
       title : todoTitle,
       isCompleted : false
     };
 
     dispatch({
         type: TODO_ACTIONS.ADD_TODO_START,
-        payload: newTodo,
+        payload: {newTodo},
     });
 
     try {
@@ -139,22 +125,18 @@ function TodosPage() {
             throw new Error('Failed to create todo');
         }
 
-        const savedTodo = await response.json();
+        const data = await response.json();
         dispatch({
             type: TODO_ACTIONS.ADD_TODO_SUCCESS,
             payload: {
-                tempId: newTodo.id,
-                savedTodo,
+                tempId: { tempId, data },
             },
         });
     } catch (err) {
 
         dispatch({
             type: TODO_ACTIONS.ADD_TODO_ERROR,
-            payload: {
-                tempId: newTodo.id,
-                message: err.message || 'Could not save todo. Please try again.',
-            },
+            payload: { tempId, message: err.message },
         });
     }
   }
@@ -166,7 +148,7 @@ function TodosPage() {
 
     dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_START,
-        payload: originalTodo,
+        payload: { id },
     });
 
     try {
@@ -179,7 +161,9 @@ function TodosPage() {
             },
             credentials: 'include',
             body: JSON.stringify({
+                title: originalTodo.title,
                 isCompleted: true,
+                createdAt: originalTodo.createdAt,
             }),
         });
 
@@ -188,14 +172,19 @@ function TodosPage() {
             throw new Error('Failed to update todo');
         }
 
-        dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS });
+        const data = await response.json();
+
+        dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
+            payload: { id, data },
+         });
     } catch (err) {
 
         dispatch({
             type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
             payload: {
+                id, 
                 originalTodo,
-                message: err.message || 'Could not complete task. Please try again.',
+                message: err.message,
             },
         });
     }
@@ -208,7 +197,7 @@ function TodosPage() {
 
     dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_START,
-        payload: editedTodo,
+        payload: { id: editedTodo.id, newTitle: editedTodo.title },
     });
 
     try {
@@ -222,7 +211,8 @@ function TodosPage() {
             credentials: 'include',
             body: JSON.stringify({
                 title: editedTodo.title,
-                isCompleted: editedTodo.isCompleted,
+                isCompleted: originalTodo.isCompleted,
+                createdAt: originalTodo.createdAt,
             }),
         });
 
@@ -231,14 +221,20 @@ function TodosPage() {
             throw new Error('Failed to update todo');
         }
 
-        dispatch({ type: TODO_ACTIONS.UPDATE_TODO_SUCCESS});
+        const data = await response.json();
+
+        dispatch({ 
+            type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
+            payload: { id: editedTodo.id, data}
+        });
     } catch (err) {
 
         dispatch({
             type: TODO_ACTIONS.UPDATE_TODO_ERROR,
             payload: {
+                id: editedTodo.id,
                 originalTodo,
-                message: err.message || 'Could not update todo. Please try again.',
+                message: err.message,
             },
         });
     }

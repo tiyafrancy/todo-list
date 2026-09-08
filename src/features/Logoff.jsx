@@ -1,26 +1,29 @@
+import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function Logoff() {
 
-    const { email, logout, isLoggingOff, authError} = useAuth();
+    const { logout} = useAuth();
+    const [isLoggingOff, setIsLoggingOff] = useState(false);
+    const [error, setError] = useState('');
 
-    // const handleLogoff = async () => {
-    //     setIsLoggingOff(true);
-    //     setError('');
+    const handleLogoff = async () => {
+        setIsLoggingOff(true);
+        setError('');
 
-    //     const result = await logout();
+        const result = await logout();
 
-    //     if (result && !result.success) {
-    //         setError(result.error);
-    //     }
-    // };
+        if (!result.success) {
+            setError(result.error);
+            setIsLoggingOff(false);
+        }
+    };
 
     return (
         <div>
-            {email && <span>Logged in as: {email}</span>}
-            {authError && <p className="error">{authError}</p>}
-            <button onClick={logout} disabled={isLoggingOff}>
-                {isLoggingOff ? 'Logging off...' : 'Log Off'}
+            {error && <p>{error}</p>}
+            <button onClick={handleLogoff}>
+                Logoff
             </button>
         </div>
     );

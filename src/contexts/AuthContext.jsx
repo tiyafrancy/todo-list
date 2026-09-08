@@ -15,8 +15,6 @@ export function AuthProvider({ children }) {
 
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
-    const [isLoggingOff, setIsLoggingOff] = useState(false);
-    const [authError, setAuthError] = useState('');
     
     const login = async (userEmail, password) => {
         try {
@@ -34,34 +32,26 @@ export function AuthProvider({ children }) {
 
             setEmail(data.name);
             setToken(data.csrfToken);
-            setAuthError('');
             return { success: true };
             }else {
-            const errorMsg = `Authentication failed: ${data?.message || 'Invalid response'}`;
-            setAuthError(errorMsg);
-            return {
-                success: false,
-                error: errorMsg,
-            };
+                return {
+                    success: false,
+                    error: `Authentication failed: ${data?.message}`,
+                };
             }
-        } catch {
-            const errorMsg = 'Network error during login';
-            setAuthError(errorMsg);
+        } catch(error) {
             return {
                 success: false,
-                error: errorMsg,
+                error: `Network error during login`,
             };
         } 
     };
 
     const logout = async() => {
-        setIsLoggingOff(true);
-        setAuthError('');
 
         if (!token) {
             setEmail('');
             setToken('');
-            setIsLoggingOff(false);
             return { success: true };
         }
 
@@ -78,29 +68,14 @@ export function AuthProvider({ children }) {
 
             const res = await fetch('/api/user/logoff', options);
 
-            if (res.ok) {
-                setEmail('');
-                setToken('');
+            if (!res.ok) throw new Error('Logout failed');
                 return { success: true };
-            } else {
-                const errorMsg = 'Failed to log out on server.';
-                setAuthError(errorMsg);
-                return {
-                    success: false,
-                    error: errorMsg,
-                };
-            }
-        } catch {
-            const errorMsg = 'Network error during logout';
-            setAuthError(errorMsg);
+
+        } catch(error) {
             return {
                 success: false,
-                error: errorMsg,
+                error: error.message,
             };
-        } finally {
-            setEmail('');
-            setToken('');
-            setIsLoggingOff(false);
         }
     };
 
@@ -108,8 +83,6 @@ export function AuthProvider({ children }) {
         email,
         token,
         isAuthenticated: !!token,
-        isLoggingOff,
-        authError,
         login,
         logout,
     };

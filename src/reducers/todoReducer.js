@@ -58,7 +58,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 isTodoListLoading: false,
-                todoList: action.payload,
+                todoList: action.payload.todos,
                 error: '',
                 filterError: '',
                 dataVersion: state.dataVersion + 1,
@@ -66,15 +66,11 @@ export function todoReducer(state, action) {
 
         case TODO_ACTIONS.FETCH_ERROR: {
 
-            const errorMessage = typeof action.payload === 'object' && action.payload !== null ? action.payload.message : action.payload;
-
-            const isFilterError = typeof action.payload === 'object' && Boolean(action.payload?.isFilterError);
-
             return {
                 ...state,
                 isTodoListLoading: false,
-                error: isFilterError ? '' : errorMessage || 'An error occurred while fetching todos',
-                filterError: isFilterError ? errorMessage || 'Error filtering/sorting todos' : '',
+                error: action.payload.isFilterError ? '' : action.payload.message,
+                filterError: action.payload.isFilterError ? action.payload.message : '',
             };
         }
 
@@ -84,24 +80,21 @@ export function todoReducer(state, action) {
                 ...state,
                 error: '',
                 filterError: '',
-                todoList: [action.payload, ...state.todoList],
+                todoList: [action.payload.newTodo, ...state.todoList],
             };
 
         case TODO_ACTIONS.ADD_TODO_SUCCESS:
             return {
                 ...state,
-                error: '',
-                filterError: '',
-                todoList: state.todoList.map((todo) => todo.id === action.payload.tempId ? action.payload.savedTodo : todo),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.tempId ? action.payload.data : todo),
                 dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.ADD_TODO_ERROR:
             return {
                 ...state,
-                filterError: '',
                 todoList: state.todoList.filter((todo) => todo.id !== action.payload.tempId),
-                error: action.payload.message || 'Could not save todo. Please try again.',
+                error: action.payload.message,
             };
 
         // Complete todo operations
@@ -116,17 +109,14 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
             return {
                 ...state,
-                error: '',
-                filterError: '',
                 dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.COMPLETE_TODO_ERROR:
             return {
                 ...state,
-                error: '',
-                filterError: '',
-                todoList: state.todoList.map((todo) => todo.id === action.payload.originalTodo.id ? action.payload.originalTodo : todo),
+                error: action.payload.message,
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, isCompleted: false } : todo),
             };
 
         // Update todo operations
@@ -135,23 +125,20 @@ export function todoReducer(state, action) {
                 ...state,
                 error: '',
                 filterError: '',
-                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, ...action.payload } : todo),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, title: action.payload.newTitle } : todo),
             };
 
         case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
             return {
                 ...state,
-                error: '',
-                filterError: '',
                 dataVersion: state.dataVersion + 1,
             };
 
         case TODO_ACTIONS.UPDATE_TODO_ERROR:
             return {
                 ...state,
-                filterError: '',
-                todoList: state.todoList.map((todo) => todo.id === action.payload.originalTodo.id ? action.payload.originalTodo : todo),
-                error: action.payload.message || 'Could not update todo. Please try again.',
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, title: action.payload.originalTodo.title } : todo),
+                error: action.payload.message,
             };
 
         // UI operations
@@ -159,18 +146,14 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.SET_SORT:
             return {
                 ...state,
-                sortBy: action.payload.sortBy ?? state.sortBy,
-                sortDirection: action.payload.sortDirection ?? state.sortDirection,
-                error: '',
-                filterError: '',
+                sortBy: action.payload.sortBy,
+                sortDirection: action.payload.sortDirection,
             };
 
         case TODO_ACTIONS.SET_FILTER:
             return {
                 ...state,
-                filterTerm: action.payload,
-                error: '',
-                filterError: '',
+                filterTerm: action.payload.filterTerm,
             };
 
         case TODO_ACTIONS.CLEAR_ERROR:
