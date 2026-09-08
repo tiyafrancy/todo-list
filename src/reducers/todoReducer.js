@@ -68,6 +68,7 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 isTodoListLoading: false,
+                todoList: state.todoList,
                 error: action.payload.isFilterError ? '' : action.payload.message,
                 filterError: action.payload.isFilterError ? action.payload.message : '',
             };
