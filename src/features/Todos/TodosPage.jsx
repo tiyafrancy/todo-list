@@ -77,7 +77,7 @@ function TodosPage() {
                 type: TODO_ACTIONS.FETCH_SUCCESS,
                 payload: { todos: data.tasks},
             });
-        } catch (err) {
+        } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.FETCH_ERROR,
                 payload: {

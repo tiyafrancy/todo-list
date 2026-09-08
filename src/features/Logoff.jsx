@@ -11,12 +11,18 @@ function Logoff() {
         setIsLoggingOff(true);
         setError('');
 
-        const result = await logout();
+        try {
+            const result = await logout();
+            if (!result.success) {
+                setError(result.error);
+            }
 
-        if (!result.success) {
-            setError(result.error);
+        } catch (err) {
+            setError('An unexpected error occured.');
+        } finally {
             setIsLoggingOff(false);
         }
+
     };
 
     return (
