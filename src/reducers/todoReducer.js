@@ -34,7 +34,7 @@ export const TODO_ACTIONS = {
 export const initialTodoState = {
     todoList: [],
     error: '',
-    isTodoListLoading: true,
+    isTodoListLoading: false,
     sortBy: 'createdAt',
     sortDirection: 'asc',
     filterTerm: '',

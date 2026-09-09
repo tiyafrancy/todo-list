@@ -49,9 +49,13 @@ export function AuthProvider({ children }) {
 
     const logout = async() => {
 
-        if (!token) {
+        const clearLocalAuth = () => {
             setEmail('');
             setToken('');
+        };
+
+        if (!token) {
+            clearLocalAuth();
             return { success: true };
         }
 
@@ -70,11 +74,11 @@ export function AuthProvider({ children }) {
 
             if (!res.ok) throw new Error('Logout failed');
 
-                setEmail('');
-                setToken('');
+                clearLocalAuth();
                 return { success: true };
 
         } catch(error) {
+            clearLocalAuth();
             return {
                 success: false,
                 error: error.message,

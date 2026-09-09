@@ -38,7 +38,13 @@ function TodosPage() {
 
   useEffect(() => {
 
-    if(!token) return;
+    if(!token) {
+        dispatch({
+            type: TODO_ACTIONS.FETCH_SUCCESS,
+            payload: { todos: [] },
+        });
+        return;
+    }
 
     async function fetchTodos() {
 
