@@ -7,7 +7,7 @@ function TodoList({todoList, onCompleteTodo, onUpdateTodo, dataVersion}){
 
         return {
             version: dataVersion,
-            todos: todoList.filter(todo => !todo.isCompleted)
+            todos: todoList
         };
     }, [todoList, dataVersion]);
 
