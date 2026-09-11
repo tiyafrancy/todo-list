@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 
 function Logoff() {
 
     const { logout} = useAuth();
+    const navigate = useNavigate();
     const [isLoggingOff, setIsLoggingOff] = useState(false);
     const [error, setError] = useState('');
 
@@ -14,8 +16,10 @@ function Logoff() {
         try {
             const result = await logout();
 
-            if (!result.success) {
-                setError(result.error)
+            if (result.success) {
+                navigate('/login');
+            } else {
+                setError(result.error);
             }
         } catch (err) {
             setError(err.message || 'An unexpected error occurred.');
