@@ -3,17 +3,20 @@ import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function RequireAuth({ children }) {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isAuthLoading  } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login', { state: { from: location }, replace: true });
+        if (!isAuthenticated && !isAuthLoading) {
+            navigate('/login', { 
+                state: { from: location }, 
+                replace: true 
+            });
         }
-    }, [isAuthenticated, location, navigate]);
+    }, [isAuthenticated, isAuthLoading, location, navigate]);
 
-    if (!isAuthenticated) {
+    if (isAuthLoading) {
         return (
             <div>
                 <p>Loading...</p>
@@ -21,7 +24,11 @@ function RequireAuth({ children }) {
         );
     }
 
-    return children;
+    if (isAuthenticated) {
+        return children;
+    }
+
+    return null;
 }
 
 export default RequireAuth;
