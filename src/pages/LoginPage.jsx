@@ -21,7 +21,6 @@ function LoginPage() {
     }, [isAuthenticated, navigate, from]);
 
     async function handleSubmit(event) {
-
         event.preventDefault();
         setIsLoggingOn(true);
         setAuthError('');
@@ -30,7 +29,9 @@ function LoginPage() {
 
             const result = await login(email, password);
 
-            if (!result.success) {
+            if (result?.success || result === undefined){
+                navigate(from, {replace: true });
+            }else if (result?.error) {
                 setAuthError(result.error);
             }
 

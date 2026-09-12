@@ -79,7 +79,7 @@ function ProfilePage(){
             </section>
 
             <div>
-                <Link to="todos">View MY Todos</Link>
+                <Link to="/todos">View My Todos</Link>
             </div>
         </div>
     )
