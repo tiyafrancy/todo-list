@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 function ProfilePage(){
-    const { user, token } = useAuth();
+    const { name, email, token } = useAuth();
     const [stats, setStats] = useState({ total: 0 , completed: 0, active: 0});
     const [isLoading, setIsLoading] = useState(true);
     const [ error, setError] = useState('');
@@ -57,7 +57,8 @@ function ProfilePage(){
 
             <section>
                 <h3>Account Details</h3>
-                <p>Name/Email: {user?.name || user?.email || 'N/A' }</p>
+                <p>Name: {name || 'N/A'}</p>
+                <p>Email: {email || 'N/A' }</p>
             </section>
 
             <section>

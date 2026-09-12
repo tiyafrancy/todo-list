@@ -29,7 +29,9 @@ function LoginPage() {
 
             const result = await login(email, password);
 
-            if (result && !result.success) {
+            if (result && result.success) {
+                navigate(from, { replace: true });
+            }else if (result && !result.success) {
                 setAuthError(result.error);
             }
 
