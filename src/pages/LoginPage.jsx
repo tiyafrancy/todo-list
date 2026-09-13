@@ -12,7 +12,7 @@ function LoginPage() {
     const [authError, setAuthError] = useState('');
     const [isLoggingOn, setIsLoggingOn] = useState(false);
 
-    const from = location.state?.from || '/todos';
+    const from = location.state?.from?.pathname || '/todos';
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -29,19 +29,14 @@ function LoginPage() {
 
         if (!result?.success) {
             setAuthError(result?.error || 'Login failed. Please try again.')
-            setIsLoggingOn(false);
         }
+        setIsLoggingOn(false);
 
     }
 
     return(
         <form onSubmit={handleSubmit}>
-            {authError && (
-                <div>
-                    <p>{authError}</p>
-                </div>
-            )}
-
+            {authError && <p className="error">{authError}</p>}
             <div>
                 <label htmlFor="email">Email:</label>
                 <input
