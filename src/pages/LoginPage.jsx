@@ -1,48 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
-function Logon() {
+function LoginPage() {
+    const { login, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authError, setAuthError] = useState('');
     const [isLoggingOn, setIsLoggingOn] = useState(false);
 
-    const { login } = useAuth();
+    const from = location.state?.from?.pathname || '/todos';
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(from, { replace: true });
+        }
+    }, [isAuthenticated, navigate, from]);
 
     async function handleSubmit(event) {
-
         event.preventDefault();
         setIsLoggingOn(true);
         setAuthError('');
 
-        try {
+        const result = await login(email, password);
 
-            const result = await login(email, password);
-
-            if (!result.success) {
-                setAuthError(result.error);
-            }
-
-        }catch (error) {
-
-            setAuthError(`Error: ${error.name} | ${error.message}`);
-
+        if (!result?.success) {
+            setAuthError(result?.error || 'Login failed. Please try again.')
         }
-        finally {
+        setIsLoggingOn(false);
 
-            setIsLoggingOn(false);
-
-        }
     }
 
     return(
         <form onSubmit={handleSubmit}>
-            {authError && (
-                <div>
-                    <p>{authError}</p>
-                </div>
-            )}
-
+            {authError && <p className="error">{authError}</p>}
             <div>
                 <label htmlFor="email">Email:</label>
                 <input
@@ -72,4 +66,4 @@ function Logon() {
     );
 }
 
-export default Logon;
+export default LoginPage;

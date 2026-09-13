@@ -1,20 +1,25 @@
 import { useEffect, useReducer } from 'react';
-import TodoList from './TodoList/TodoList.jsx';
-import TodoForm from './TodoForm.jsx';
-import SortBy from '../../shared/SortBy.jsx';
-import useDebounce from '../../utils/useDebounce.js'
-import FilterInput from '../../shared/FilterInput.jsx';
-import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useSearchParams } from 'react-router';
+import TodoList from '../features/Todos/TodoList/TodoList.jsx';
+import TodoForm from '../features/Todos/TodoForm.jsx';
+import SortBy from '../shared/SortBy.jsx';
+import useDebounce from '../utils/useDebounce.js'
+import FilterInput from '../shared/FilterInput.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import {
     todoReducer,
     initialTodoState,
     TODO_ACTIONS,
-} from '../../reducers/todoReducer.js';
+} from '../reducers/todoReducer.js';
+import StatusFilter from '../shared/StatusFilter.jsx';
 
 function TodosPage() {
 
   const { token } = useAuth();  
+  const [searchParams] = useSearchParams();
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+
+  const statusFilter = searchParams.get('status') || 'all';
 
   const {
     todoList,
@@ -160,6 +165,15 @@ function TodosPage() {
 
     try {
 
+        const updatePayload = {
+            title: originalTodo.title,
+            isCompleted: true,
+        };
+
+        if (originalTodo.createdAt) {
+            updatePayload.createdAt = originalTodo.createdAt;
+        }
+
         const response = await fetch(`/api/tasks/${id}`, {
             method: 'PATCH',
             headers: {
@@ -167,16 +181,12 @@ function TodosPage() {
                 'X-CSRF-TOKEN': token,
             },
             credentials: 'include',
-            body: JSON.stringify({
-                title: originalTodo.title,
-                isCompleted: true,
-                createdAt: originalTodo.createdAt,
-            }),
+            body: JSON.stringify({updatePayload}),
         });
 
         if (!response.ok) {
-
-            throw new Error('Failed to update todo');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to update todo');
         }
 
         const data = await response.json();
@@ -209,6 +219,15 @@ function TodosPage() {
 
     try {
 
+        const updatePayload = {
+            title: editedTodo.title,
+            isCompleted: Boolean(originalTodo.isCompleted),
+        };
+
+        if (originalTodo.createdAt) {
+            updatePayload.createdAt = originalTodo.createdAt;
+        }
+
         const response = await fetch(`/api/tasks/${editedTodo.id}`, {
             method: 'PATCH',
             headers: {
@@ -216,16 +235,12 @@ function TodosPage() {
                 'X-CSRF-TOKEN': token,
             },
             credentials: 'include',
-            body: JSON.stringify({
-                title: editedTodo.title,
-                isCompleted: originalTodo.isCompleted,
-                createdAt: originalTodo.createdAt,
-            }),
+            body: JSON.stringify({updatePayload}),
         });
 
         if (!response.ok) {
-
-            throw new Error('Failed to update todo');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to update todo');
         }
 
         const data = await response.json();
@@ -292,6 +307,8 @@ function TodosPage() {
         }
         />
 
+        <StatusFilter />
+
         <FilterInput
         filterTerm={filterTerm}
         onFilterChange={handleFilterChange}
@@ -304,6 +321,7 @@ function TodosPage() {
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
         dataVersion={dataVersion}
+        statusFilter={statusFilter}
         />
     </div>
   );
