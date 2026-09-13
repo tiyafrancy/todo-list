@@ -25,26 +25,33 @@ function LoginPage() {
         setIsLoggingOn(true);
         setAuthError('');
 
-        try {
-
-            const result = await login(email, password);
-
-            if (result && result.success) {
-                navigate(from, { replace: true });
-            }else if (result && !result.success) {
-                setAuthError(result.error);
-            }
-
-        }catch (error) {
-
-            setAuthError(`Error: ${error.name} | ${error.message}`);
-
+        const result = await login(email, password);
+        if (!result.success) {
+            setAuthError(result.error);
         }
-        finally {
+        setIsLoggingOn(false);
 
-            setIsLoggingOn(false);
 
-        }
+        // try {
+
+        //     const result = await login(email, password);
+
+        //     if (result && result.success) {
+        //         navigate(from, { replace: true });
+        //     }else if (result && !result.success) {
+        //         setAuthError(result.error);
+        //     }
+
+        // }catch (error) {
+
+        //     setAuthError(`Error: ${error.name} | ${error.message}`);
+
+        // }
+        // finally {
+
+        //     setIsLoggingOn(false);
+
+        // }
     }
 
     return(
