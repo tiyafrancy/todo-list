@@ -26,32 +26,14 @@ function LoginPage() {
         setAuthError('');
 
         const result = await login(email, password);
-        if (!result.success) {
-            setAuthError(result.error);
+
+        if (result && result.success) {
+            navigate(from, { replace: true });
+        }else {
+            setAuthError(result.error || 'Login failed. Please try again.');
+            setIsLoggingOn(false);
         }
-        setIsLoggingOn(false);
 
-
-        // try {
-
-        //     const result = await login(email, password);
-
-        //     if (result && result.success) {
-        //         navigate(from, { replace: true });
-        //     }else if (result && !result.success) {
-        //         setAuthError(result.error);
-        //     }
-
-        // }catch (error) {
-
-        //     setAuthError(`Error: ${error.name} | ${error.message}`);
-
-        // }
-        // finally {
-
-        //     setIsLoggingOn(false);
-
-        // }
     }
 
     return(
