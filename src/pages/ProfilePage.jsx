@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link } from 'react-router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 function ProfilePage(){
-    const { name, email, token } = useAuth();
+    const { email, token, isAuthenticated } = useAuth();
     const [stats, setStats] = useState({ total: 0 , completed: 0, active: 0});
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [ error, setError] = useState('');
 
     useEffect(() => {
@@ -33,7 +32,7 @@ function ProfilePage(){
                 }
 
                 const data = await response.json();
-                const todos = Array.isArray(data) ? data.tasks : [];
+                const todos = Array.isArray(data.tasks) ? data.tasks : [];
 
                 const total = todos.length;
                 const completed = todos.filter((todo) => todo.isCompleted).length;
@@ -57,33 +56,27 @@ function ProfilePage(){
 
             <section>
                 <h3>Account Details</h3>
-                <p>Name: {name || 'N/A'}</p>
-                <p>Email: {email || 'N/A' }</p>
+                <p>Name: {email}</p>
+                <p>Status: {isAuthenticated ? 'Logged in' : 'Logged out'}</p>
             </section>
 
             <section>
                 <h3>Todo Stats</h3>
-                {isLoading ? (
-                    <p>Loading stats...</p>
-                ) : error ? (
-                    <p style={{ color: 'red' }}>{error}</p>
-                ) : (
+                {isLoading && <p>Loading stats...</p>}
+                {error && <p className='error'>{error}</p>}
+                {!isLoading && !error && (
                     <div>
                         <ul>
                             <li>Total todos: {stats.total}</li>
                             <li>Completed todos: {stats.completed}</li>
                             <li>Active/Pending: {stats.active}</li>
                         </ul>
-                        <p>Completion Rate: {completionPercentage}%</p>
+                        {stats.total > 0 && <p>Completion Rate: {completionPercentage}%</p>}
                     </div>
                 )}
             </section>
-
-            <div>
-                <Link to="/todos">View My Todos</Link>
-            </div>
         </div>
-    )
+    );
 }
 
 export default ProfilePage;

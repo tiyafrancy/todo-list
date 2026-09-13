@@ -6,36 +6,25 @@ function Logoff() {
 
     const { logout} = useAuth();
     const navigate = useNavigate();
-    // const [isLoggingOff, setIsLoggingOff] = useState(false);
+
     const [error, setError] = useState('');
 
     const handleLogoff = async () => {
-        // setIsLoggingOff(true);
         setError('');
 
-        // try {
-            const result = await logout();
 
-            if (result.success) {
-                navigate('/login');
-            } else {
-                setError(result.error);
-            }
-        // } catch (err) {
-        //     setError(err.message || 'An unexpected error occurred.');
-        // } finally {
-                        
-        //     setIsLoggingOff(false);
-        // }
+        const result = await logout();
 
-
+        if (result.success) {
+            navigate('/login');
+        } else {
+            setError(result.error);
+        }
     };
 
     return (
         <div>
             <button type='button' onClick={handleLogoff}>
-             {/* disabled={isLoggingOff}> */}
-                {/* {isLoggingOff ? <> Logging off...</> : <>Log Off</>} */}
                 Log off
             </button>
             {error && <p>{error}</p>}
