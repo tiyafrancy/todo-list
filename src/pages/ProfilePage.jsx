@@ -56,13 +56,15 @@ function ProfilePage(){
             <section>
                 <h3>Account Details</h3>
                 <p>Name: {email}</p>
-                <p>Status: 'Logged in'</p>
+                <p>Status: Logged in</p>
             </section>
 
             <section>
                 <h3>Todo Stats</h3>
-                {!isLoading && <p>Loading stats...</p>}
+                {isLoading && <p>Loading stats...</p>}
+
                 {error && <p className='error'>{error}</p>}
+
                 {!isLoading && !error && (
                     <div>
                         <ul>
