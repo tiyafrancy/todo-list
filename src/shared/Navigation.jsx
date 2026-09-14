@@ -4,10 +4,14 @@ import { useAuth } from "../contexts/AuthContext";
 function Navigation() {
     const { isAuthenticated } = useAuth();
 
-    const navLinkStyle = ({ isActive }) => ({
-        fontWeight: isActive ? 'bold' : 'normal',
-        textDecoration: isActive ? 'underline' : 'none',
-    });
+    const navLinkStyle = ({ isActive }) => 
+        isActive
+        ? {
+            fontWeight: 'bold',
+            textDecoration: 'underline',
+        }
+        : undefined;
+
 
     return (
         <nav>
