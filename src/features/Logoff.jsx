@@ -6,12 +6,12 @@ function Logoff() {
 
     const { logout} = useAuth();
     const navigate = useNavigate();
-
+    const [isLoggingOff , setIsLoggingOff] = useState(false);
     const [error, setError] = useState('');
 
     const handleLogoff = async () => {
         setError('');
-
+        setIsLoggingOff(true);
 
         const result = await logout();
 
@@ -19,15 +19,16 @@ function Logoff() {
             navigate('/login');
         } else {
             setError(result.error);
+            setIsLoggingOff(false);
         }
     };
 
     return (
         <div>
-            <button type='button' onClick={handleLogoff}>
-                Log off
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <button type='button' onClick={handleLogoff} disabled={isLoggingOff}>
+                {isLoggingOff ? 'Logging out...' : 'Log out'}
             </button>
-            {error && <p>{error}</p>}
         </div>
     );
 }

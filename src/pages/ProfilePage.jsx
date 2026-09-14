@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 function ProfilePage(){
-    const { email, token, isAuthenticated } = useAuth();
+    const { email, token} = useAuth();
     const [stats, setStats] = useState({ total: 0 , completed: 0, active: 0});
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [ error, setError] = useState('');
 
     useEffect(() => {
@@ -56,12 +56,12 @@ function ProfilePage(){
             <section>
                 <h3>Account Details</h3>
                 <p>Name: {email}</p>
-                <p>Status: {isAuthenticated ? 'Logged in' : 'Logged out'}</p>
+                <p>Status: 'Logged in'</p>
             </section>
 
             <section>
                 <h3>Todo Stats</h3>
-                {isLoading && <p>Loading stats...</p>}
+                {!isLoading && <p>Loading stats...</p>}
                 {error && <p className='error'>{error}</p>}
                 {!isLoading && !error && (
                     <div>

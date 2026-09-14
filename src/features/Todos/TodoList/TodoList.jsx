@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import TodoListItem from './TodoListItem.jsx';
 
 function TodoList({
-    todoList, 
+    todoList = [], 
     onCompleteTodo, 
     onUpdateTodo, 
     dataVersion,

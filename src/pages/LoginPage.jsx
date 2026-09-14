@@ -10,7 +10,6 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authError, setAuthError] = useState('');
-    const [isLoggingOn, setIsLoggingOn] = useState(false);
 
     const from = location.state?.from?.pathname || '/todos';
 
@@ -22,7 +21,6 @@ function LoginPage() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        setIsLoggingOn(true);
         setAuthError('');
 
         const result = await login(email, password);
@@ -30,39 +28,41 @@ function LoginPage() {
         if (!result?.success) {
             setAuthError(result?.error || 'Login failed. Please try again.')
         }
-        setIsLoggingOn(false);
 
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+        <div>
             {authError && <p className="error">{authError}</p>}
-            <div>
-                <label htmlFor="email">Email:</label>
-                <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                />
-            </div>
+            
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                    />
+                </div>
 
-            <div>
-                <label htmlFor="password">Password:</label>
-                <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    required
-                />
-            </div>
+                <div>
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        required
+                    />
+                </div>
 
-            <button type="submit" disabled={isLoggingOn}>
-                {isLoggingOn ? 'Logging in...' : 'Log On'}
-            </button>
-        </form>
+                <button type="submit">Log in
+                    {/* {isLoggingOn ? 'Logging in...' : 'Log On'} */}
+                </button>
+            </form>
+        </div>
     );
 }
 

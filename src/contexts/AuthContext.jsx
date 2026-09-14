@@ -50,39 +50,30 @@ export function AuthProvider({ children }) {
 
     const logout = async() => {
 
-        if (!token) {
-            setEmail('');
-            setToken('');
-            return { success: true };
-        }
-
         try {
-            
-            const options = {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-Token': token,
-                },
-                credentials: 'include',
-            };
-
-            const res = await fetch('/api/users/logoff', options);
-
-            if (!res.ok) {
-                return {
-                    success: false,
-                    error: 'Logout failed',
+            if (token) {
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': token,
+                    },
+                    credentials: 'include',
                 };
+
+                const res = await fetch('/api/users/logoff', options);
+
+                if (!res.ok) {
+                        throw new Error('Logout failed');
+                }
             }
-            return { success: true };
         } catch(error) {
             return {
-                success: false,
                 error: 'Network error during logout',
             };
         }finally {
             setEmail('');
             setToken('');
+            return { success: true};
         }
     };
 
