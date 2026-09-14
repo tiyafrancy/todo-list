@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
                 const options = {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-Token': token,
+                        'X-CSRF-TOKEN': token,
                     },
                     credentials: 'include',
                 };

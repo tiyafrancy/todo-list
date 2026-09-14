@@ -13,6 +13,7 @@ function ProfilePage(){
             try {
                 setIsLoading(true);
                 setError('');
+                setStats(null);
 
                 if (!token) { return; }
 
@@ -41,6 +42,7 @@ function ProfilePage(){
                 setStats({total, completed, active });
             } catch (err) {
                 setError(`Error loading statistics: ${err.message}`);
+                setStats(null);
             } finally {
                 setIsLoading(false);
             }
