@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState} from "react";
 
 const AuthContext = createContext();
 
@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
 
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
-    
+
     const login = async (userEmail, password) => {
         try {
             const options = {
@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
 
             setEmail(data.name);
             setToken(data.csrfToken);
+
             return { success: true };
             }else {
                 return {
@@ -49,40 +50,30 @@ export function AuthProvider({ children }) {
 
     const logout = async() => {
 
-        const clearLocalAuth = () => {
+        try {
+            if (token) {
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': token,
+                    },
+                    credentials: 'include',
+                };
+
+                const res = await fetch('/api/users/logoff', options);
+
+                if (!res.ok) {
+                        throw new Error('Logout failed');
+                }
+            }
+        } catch(error) {
+            return {
+                error: 'Network error during logout',
+            };
+        }finally {
             setEmail('');
             setToken('');
-        };
-
-        if (!token) {
-            clearLocalAuth();
-            return { success: true };
-        }
-
-        try {
-            
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': token,
-                },
-                credentials: 'include',
-            };
-
-            const res = await fetch('/api/user/logoff', options);
-
-            if (!res.ok) throw new Error('Logout failed');
-
-                clearLocalAuth();
-                return { success: true };
-
-        } catch(error) {
-            clearLocalAuth();
-            return {
-                success: false,
-                error: error.message,
-            };
+            return { success: true};
         }
     };
 
