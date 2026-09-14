@@ -68,7 +68,7 @@ function ProfilePage(){
 
                 {error && <p className='error'>{error}</p>}
 
-                {!isLoading && !error && (
+                {!isLoading && !error && stats && (
                     <div>
                         <ul>
                             <li>Total todos: {stats.total}</li>
