@@ -1,12 +1,15 @@
 
+import styles from "./Navigation.module.css";
+
 function SortBy({ sortBy, sortDirection, onSortByChange, onSortDirectionChange }) {
 
     return (
 
-        <div className="sort-by-container">
-            <label htmlFor="sortBySelect">Sort by</label>
+        <div className={styles.container}>
+            <label htmlFor="sortBySelect" className={styles.label}>Sort by:</label>
             <select 
                 id="sortBySelect"
+                className={styles.select}
                 value={sortBy}
                 onChange={(e) => onSortByChange(e.target.value)}
                 >
@@ -14,9 +17,10 @@ function SortBy({ sortBy, sortDirection, onSortByChange, onSortDirectionChange }
                 <option value="title">Title</option>
             </select>
 
-            <label htmlFor="sortDirectionSelect"> Order </label>
+            <label htmlFor="sortDirectionSelect" className={styles.label}> Order:</label>
             <select
                 id="sortDirectionSelect"
+                className={styles.select}
                 value={sortDirection}
                 onChange={(e) => onSortDirectionChange(e.target.value)}
                 >

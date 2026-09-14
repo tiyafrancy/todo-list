@@ -10,8 +10,10 @@ function Header() {
     return (
         <header className={styles.header}>
             <h1 className={styles.title}>Todo List</h1>
-            <Navigation />
-            {isAuthenticated && <Logoff />}
+            <div className={styles.rightSection}>
+                <Navigation />
+                {isAuthenticated && <Logoff />}
+            </div>
         </header>
     );
 }
