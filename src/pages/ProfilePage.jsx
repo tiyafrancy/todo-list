@@ -9,11 +9,12 @@ function ProfilePage(){
 
     useEffect(() => {
         async function fetchTodoStats() {
-            if (!token) return;
 
             try {
                 setIsLoading(true);
                 setError('');
+
+                if (!token) { return; }
 
                 const options = {
                     method: 'GET',

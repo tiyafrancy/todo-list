@@ -25,7 +25,9 @@ function LoginPage() {
 
         const result = await login(email, password);
 
-        if (!result?.success) {
+        if (result?.success) {
+            navigate(from, { replace: true});
+        }else {
             setAuthError(result?.error || 'Login failed. Please try again.')
         }
 
@@ -59,7 +61,6 @@ function LoginPage() {
                 </div>
 
                 <button type="submit">Log in
-                    {/* {isLoggingOn ? 'Logging in...' : 'Log On'} */}
                 </button>
             </form>
         </div>
