@@ -13,8 +13,8 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
 
-    const [email, setEmail] = useState('');
-    const [token, setToken] = useState('');
+    const [email, setEmail] = useState(() => sessionStorage.getItem('auth_email') || '');
+    const [token, setToken] = useState(() => sessionStorage.getItem('auth_token') || '');
 
     const login = async (userEmail, password) => {
         try {
@@ -33,11 +33,13 @@ export function AuthProvider({ children }) {
             setEmail(data.name);
             setToken(data.csrfToken);
 
+            sessionStorage.setItem('auth_email', data.name);
+            sessionStorage.setItem('auth_token', data.csrfToken);
             return { success: true };
             }else {
                 return {
                     success: false,
-                    error: `Authentication failed: ${data?.message}`,
+                    error: `Authentication failed: ${data?.message || 'Invalid credentials'}`,
                 };
             }
         } catch(error) {
@@ -49,7 +51,6 @@ export function AuthProvider({ children }) {
     };
 
     const logout = async() => {
-
         try {
             if (token) {
                 const options = {
@@ -59,12 +60,7 @@ export function AuthProvider({ children }) {
                     },
                     credentials: 'include',
                 };
-
-                const res = await fetch('/api/users/logoff', options);
-
-                if (!res.ok) {
-                        throw new Error('Logout failed');
-                }
+                await fetch('/api/users/logoff', options);
             }
         } catch(error) {
             return {
@@ -73,8 +69,10 @@ export function AuthProvider({ children }) {
         }finally {
             setEmail('');
             setToken('');
-            return { success: true};
+            sessionStorage.removeItem('auth_email');
+            sessionStorage.removeItem('auth_token');
         }
+        return { success: true};
     };
 
     const value = {

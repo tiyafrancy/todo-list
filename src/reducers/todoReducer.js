@@ -47,6 +47,15 @@ export const initialTodoState = {
     dataVersion: 0,
 };
 
+const normalizeTodo = (todoData) => {
+    if (!todoData) return todoData;
+    const normalizedId = todoData.id || todoData._id;
+    return {
+        ...todoData,
+        id: normalizedId,
+    };
+};
+
 export function todoReducer(state, action) {
     switch (action.type) {
 
@@ -59,16 +68,18 @@ export function todoReducer(state, action) {
                 filterError: '',
             };
 
-        case TODO_ACTIONS.FETCH_SUCCESS:
+        case TODO_ACTIONS.FETCH_SUCCESS: {
+            const normalizedTodos = (action.payload.todos || []).map(normalizeTodo);
             return {
                 ...state,
                 isTodoListLoading: false,
-                todoList: action.payload.todos,
+                todoList: normalizedTodos,
                 error: '',
                 filterError: '',
             };
+        }
 
-        case TODO_ACTIONS.FETCH_ERROR: {
+        case TODO_ACTIONS.FETCH_ERROR:
 
             return {
                 ...state,
@@ -77,7 +88,6 @@ export function todoReducer(state, action) {
                 error: action.payload.isFilterError ? '' : action.payload.message,
                 filterError: action.payload.isFilterError ? action.payload.message : '',
             };
-        }
 
         // Add todo operations
         case TODO_ACTIONS.ADD_TODO_START:
@@ -88,12 +98,14 @@ export function todoReducer(state, action) {
                 todoList: [action.payload.newTodo, ...state.todoList],
             };
 
-        case TODO_ACTIONS.ADD_TODO_SUCCESS:
+        case TODO_ACTIONS.ADD_TODO_SUCCESS: {
+            const returnedData = normalizeTodo(action.payload.data?.task || action.payload.data);
             return {
                 ...state,
-                todoList: state.todoList.map((todo) => todo.id === action.payload.tempId ? action.payload.data : todo),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.tempId ? { ...todo, ...returnedData } : todo),
                 dataVersion: state.dataVersion + 1,
             };
+        }
 
         case TODO_ACTIONS.ADD_TODO_ERROR:
             return {
@@ -109,15 +121,17 @@ export function todoReducer(state, action) {
                 ...state,
                 error: '',
                 filterError: '',
-                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, isCompleted: true } : todo),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, isCompleted: !todo.isCompleted } : todo),
             };
 
-        case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
+        case TODO_ACTIONS.COMPLETE_TODO_SUCCESS: {
+            const returnedData = normalizeTodo(action.payload.data?.task || action.payload.data);
             return {
                 ...state,
                 dataVersion: state.dataVersion + 1,
-                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, ...action.payload.data } : todo),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, ...returnedData } : todo),
             };
+        }
 
         case TODO_ACTIONS.COMPLETE_TODO_ERROR:
             return {
@@ -136,12 +150,14 @@ export function todoReducer(state, action) {
                 todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, title: action.payload.newTitle } : todo),
             };
 
-        case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
+        case TODO_ACTIONS.UPDATE_TODO_SUCCESS: {
+            const returnedData = normalizeTodo(action.payload.data?.task || action.payload.data);
             return {
                 ...state,
                 dataVersion: state.dataVersion + 1,
-                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, ...action.payload.data } : todo ),
+                todoList: state.todoList.map((todo) => todo.id === action.payload.id ? { ...todo, ...returnedData } : todo ),
             };
+        }
 
         case TODO_ACTIONS.UPDATE_TODO_ERROR:
             return {
@@ -169,11 +185,11 @@ export function todoReducer(state, action) {
         case TODO_ACTIONS.DELETE_TODO_ERROR:
             return {
                 ...state,
-                todoList: [...state.todoList, action.payload.originalTodo],
+                todoList: [action.payload.originalTodo, ...state.todoList],
                 error: action.payload.message,
                 filterError: '',
             };
-            
+
         // UI operations
 
         case TODO_ACTIONS.SET_SORT:
