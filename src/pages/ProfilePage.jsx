@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from '../contexts/AuthContext.jsx';
+import styles from './ProfilePage.module.css';
 
 function ProfilePage(){
     const { email, token} = useAuth();
@@ -57,29 +58,59 @@ function ProfilePage(){
     const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
     return (
-        <div>
-            <h2>User Profile</h2>
+        <div className={styles.container}>
+            <h2 className={styles.title}>User Profile</h2>
 
-            <section>
-                <h3>Account Details</h3>
-                <p>Name: {email}</p>
-                <p>Status: Logged in</p>
+            <section className={styles.card}>
+                <h3 className={styles.cardTitle}>Account Details</h3>
+                <div className={styles.infoRow}>
+                    <span className={styles.infoLable}>Email</span>
+                    <span className={styles.infoValue}>{email}</span>
+                </div>
+                <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Status</span>
+                    <span className={styles.statusBadge}>Logged In</span>
+                </div>
             </section>
 
-            <section>
-                <h3>Todo Stats</h3>
-                {isLoading && <p>Loading stats...</p>}
+            <section className={styles.card}>
+                <h3 className={styles.cardTitle}>Todo Statistics</h3>
 
-                {error && <p className='error'>{error}</p>}
+                {isLoading && <p className={styles.cardTitle}>Loading stats...</p>}
+
+                {error && <div className={styles.errorBanner}>{error}</div>}
 
                 {!isLoading && !error && stats && (
                     <div>
-                        <ul>
-                            <li>Total todos: {stats.total}</li>
-                            <li>Completed todos: {stats.completed}</li>
-                            <li>Active/Pending: {stats.active}</li>
+                        <ul className={styles.statsList}>
+                            <li className={styles.statItem}>
+                                <span className={styles.statNumber}>{stats.total}</span>
+                                <span className={styles.statLabel}>Total</span>
+                                </li>
+                            <li className={styles.statItem}>
+                                <span className={styles.statNumber}>{stats.completed}</span>
+                                <span className={styles.statLabel}>Completed</span>
+                            </li>
+                            <li className={styles.statItem}>
+                                <span className={styles.statNumber}>{stats.active}</span>
+                                <span className={styles.statLabel}>Active</span>
+                            </li>
                         </ul>
-                        {stats.total > 0 && <p>Completion Rate: {completionPercentage}%</p>}
+
+                        {stats.total > 0 && (
+                            <div className={styles.rateContainer}>
+                                <div className={styles.rateHeader}>
+                                    <span>Completion Rate</span>
+                                    <span>{completionPercentage}%</span>
+                                </div>
+                                <div className={styles.progressBarTrack}>
+                                    <div
+                                        className={styles.progressBarFill}
+                                        style={{width: `${completionPercentage}%` }}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </section>
