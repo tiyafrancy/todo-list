@@ -75,9 +75,9 @@ function TodosPage() {
                 credentials: 'include',
             });
 
-            if(response.status === 401) {
-                throw new Error('Unauthorized access');
-            }
+            // if(response.status === 401) {
+            //     throw new Error('Unauthorized access');
+            // }
 
             if(!response.ok) {
                 throw new Error('Failed to fetch todo list');
@@ -86,7 +86,7 @@ function TodosPage() {
             const data = await response.json();
             dispatch({
                 type: TODO_ACTIONS.FETCH_SUCCESS,
-                payload: { todos: data.tasks},
+                payload: { todos: data.tasks || [] },
             });
         } catch (error) {
             dispatch({
@@ -104,7 +104,7 @@ function TodosPage() {
 
   async function addTodo(todoTitle){
 
-    const tempId = Date.now();
+    const tempId = Date.now().toString();
     const newTodo = {
       id : tempId,
       title : todoTitle,
@@ -155,51 +155,42 @@ function TodosPage() {
 
   async function completeTodo(id) {
 
-    const originalTodo = todoList.find((todo) => todo.id === id);
+    const originalTodo = todoList.find((todo) => String(todo.id) === String(id));
     if (!originalTodo) return;
 
     dispatch({
         type: TODO_ACTIONS.COMPLETE_TODO_START,
-        payload: { id },
+        payload: { id: originalTodo.id },
     });
 
     try {
 
-        const updatePayload = {
-            title: originalTodo.title,
-            isCompleted: true,
-        };
-
-        if (originalTodo.createdAt) {
-            updatePayload.createdAt = originalTodo.createdAt;
-        }
-
-        const response = await fetch(`/api/tasks/${id}`, {
+        const response = await fetch(`/api/tasks/${originalTodo.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': token,
             },
             credentials: 'include',
-            body: JSON.stringify({updatePayload}),
+            body: JSON.stringify({
+                title: originalTodo.title,
+                isCompleted: !originalTodo.isCompleted,
+            }),
         });
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || 'Failed to update todo');
-        }
+        if (!response.ok) throw new Error('Failed to update todo');
 
         const data = await response.json();
 
         dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS,
-            payload: { id, data },
+            payload: { id: originalTodo.id, data },
          });
     } catch (err) {
 
         dispatch({
             type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
             payload: {
-                id, 
+                id: originalTodo.id,
                 originalTodo,
                 message: err.message,
             },
@@ -209,55 +200,85 @@ function TodosPage() {
 
   async function updateTodo(editedTodo) {
 
-    const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
+    const originalTodo = todoList.find((todo) => String(todo.id) === String(editedTodo.id));
     if (!originalTodo) return;
 
     dispatch({
         type: TODO_ACTIONS.UPDATE_TODO_START,
-        payload: { id: editedTodo.id, newTitle: editedTodo.title },
+        payload: { id: originalTodo.id, newTitle: editedTodo.title },
     });
 
     try {
 
-        const updatePayload = {
-            title: editedTodo.title,
-            isCompleted: Boolean(originalTodo.isCompleted),
-        };
-
-        if (originalTodo.createdAt) {
-            updatePayload.createdAt = originalTodo.createdAt;
-        }
-
-        const response = await fetch(`/api/tasks/${editedTodo.id}`, {
+        const response = await fetch(`/api/tasks/${originalTodo.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': token,
             },
             credentials: 'include',
-            body: JSON.stringify({updatePayload}),
+            body: JSON.stringify({
+                title: editedTodo.title,
+                isCompleted: originalTodo.isCompleted,
+            }),
         });
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || 'Failed to update todo');
-        }
+        if (!response.ok)
+            throw new Error('Failed to update todo');
 
         const data = await response.json();
 
         dispatch({ 
             type: TODO_ACTIONS.UPDATE_TODO_SUCCESS,
-            payload: { id: editedTodo.id, data}
+            payload: { id: originalTodo.id, data}
         });
     } catch (err) {
 
         dispatch({
             type: TODO_ACTIONS.UPDATE_TODO_ERROR,
             payload: {
-                id: editedTodo.id,
+                id: originalTodo.id,
                 originalTodo,
                 message: err.message,
             },
+        });
+    }
+  }
+
+  async function deleteTodo(id) {
+    const originalTodo = todoList.find((todo) => String(todo.id) === String(id));
+    if(!originalTodo) return;
+
+    dispatch({
+        type: TODO_ACTIONS.DELETE_TODO_START,
+        payload: { id: originalTodo.id },
+    });
+
+    try {
+        const response = await fetch(`/api/tasks/${originalTodo.id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': token,
+            },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete todo');
+        }
+
+        dispatch({
+            type: TODO_ACTIONS.DELETE_TODO_SUCCESS,
+            payload: { id: originalTodo.id },
+        });
+    } catch (err) {
+        dispatch({
+            type: TODO_ACTIONS.DELETE_TODO_ERROR,
+            payload: {
+                id: originalTodo.id,
+                originalTodo,
+                message: err.message,
+            }
         });
     }
   }
@@ -320,6 +341,7 @@ function TodosPage() {
         todoList={todoList} 
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
+        onDeleteTodo={deleteTodo}
         dataVersion={dataVersion}
         statusFilter={statusFilter}
         />

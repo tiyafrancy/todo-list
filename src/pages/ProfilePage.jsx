@@ -13,9 +13,11 @@ function ProfilePage(){
             try {
                 setIsLoading(true);
                 setError('');
-                setStats(null);
 
-                if (!token) { return; }
+                if (!token) { 
+                    setIsLoading(false);
+                    return;
+                 }
 
                 const options = {
                     method: 'GET',
@@ -33,16 +35,16 @@ function ProfilePage(){
                     throw new Error('Failed to fetch todos');
                 }
 
-                const todos = await response.json();
+                const data = await response.json();
 
-                const total = todos.length;
-                const completed = todos.filter((todo) => todo.isCompleted).length;
+                const todoList = data.tasks || data || [];
+                const total = todoList.length;
+                const completed = todoList.filter((todo) => todo.isCompleted).length;
                 const active = total - completed;
 
                 setStats({total, completed, active });
             } catch (err) {
                 setError(`Error loading statistics: ${err.message}`);
-                setStats(null);
             } finally {
                 setIsLoading(false);
             }
@@ -50,7 +52,9 @@ function ProfilePage(){
         fetchTodoStats();
     }, [token]);
 
-    const completionPercentage = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+    const totalCount = stats.total || 0;
+    const completedCount = stats?.completed || 0;
+    const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
     return (
         <div>
