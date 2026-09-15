@@ -1,9 +1,6 @@
 .header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: var(--background);
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
 .title {
@@ -11,12 +8,5 @@
     font-weight: 700;
     color: var(--primary);
     margin: 0;
-    text-align: center;
-    grid-column: 2;
 }
 
-.rightSection {
-    display: flex;
-    justify-content: flex-end;
-    grid-column: 3;
-}

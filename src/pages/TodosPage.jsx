@@ -262,6 +262,44 @@ function TodosPage() {
     }
   }
 
+  async function deleteTodo(id) {
+    const originalTodo = todoList.find((todo) => todo.id === id);
+    if(!originalTodo) return;
+
+    dispatch({
+        type: TODO_ACTIONS.DELETE_TODO_START,
+        payload: { id },
+    });
+
+    try {
+        const response = await fetch(`/api/tasks/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': token,
+            },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to delete todo');
+        }
+
+        dispatch({
+            type: TODO_ACTIONS.DELETE_TODO_SUCCESS,
+            payload: { id },
+        });
+    } catch (err) {
+        dispatch({
+            type: TODO_ACTIONS.DELETE_TODO_ERROR,
+            payload: {
+                originalTodo,
+                message: err.message,
+            }
+        });
+    }
+  }
+
   return (
     <div>
       <h1>Todo List</h1>
@@ -320,6 +358,7 @@ function TodosPage() {
         todoList={todoList} 
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
+        onDeleteTodo={deleteTodo}
         dataVersion={dataVersion}
         statusFilter={statusFilter}
         />
