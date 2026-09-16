@@ -4,8 +4,7 @@ A modern, responsive full-stack Todo application built with React, React Router,
 
 ## Live Demo
 
-* **Deployment Status:** Configured for Vercel deployment (`vercel.json` API proxy routes included).
-* **Local Production Build:** Verified via `npm run build` and `npm run preview`.
+youtube demo link : https://youtu.be/fhn8yLNIGnQ
 
 ## Features List
 
@@ -48,7 +47,7 @@ Follow these steps to set up and run the project locally on your machine.
    
     open bash/terminal
 
-    git clone (https://github.com/tiyafrancy/todo-list)
+    git clone from (https://github.com/tiyafrancy/todo-list)
 
 2. Install dependencies
 
