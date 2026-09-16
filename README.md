@@ -27,10 +27,10 @@ youtube demo link : https://youtu.be/fhn8yLNIGnQ
 ## Screenshots
 
 ### Desktop View 
-![Desktop View](./assets/desktop.png)
+![Desktop View](./src/assets/desktop.png)
 
 ### Mobile View 
-![Mobile View](./assets/mobile.png)
+![Mobile View](./src/assets/mobile.png)
 
 ## Getting Started
 
