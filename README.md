@@ -1,16 +1,11 @@
-
-### How to run the development server
-
--Start the development server with the command: npm run dev
--Open a browser and navigate to http://localhost:5173.
-
 # Todo-list
 
 A modern, responsive full-stack Todo application built with React, React Router, and CSS Modules. This app allows users to create, update, filter, sort, and manage daily tasks with a clean, accessible interface and real-time statistics tracking.
 
 ## Live Demo
 
-
+* **Deployment Status:** Configured for Vercel deployment (`vercel.json` API proxy routes included).
+* **Local Production Build:** Verified via `npm run build` and `npm run preview`.
 
 ## Features List
 
@@ -38,17 +33,7 @@ A modern, responsive full-stack Todo application built with React, React Router,
 ### Mobile View 
 ![Mobile View](./assets/mobile.png)
 
-### Desktop View
-![Desktop View](./assets/desktop.png)
-*(Replace link with your screenshot path, e.g., `./screenshots/desktop.png`)*
-
-### Mobile View
-![Mobile View](./assets/mobile.png)
-*(Replace link with your screenshot path, e.g., `./screenshots/mobile.png`)*
-
----
-
-## 🏁 Getting Started
+## Getting Started
 
 Follow these steps to set up and run the project locally on your machine.
 
@@ -59,10 +44,11 @@ Follow these steps to set up and run the project locally on your machine.
 
 ### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/your-username/todo-app.git](https://github.com/your-username/todo-app.git)
-   cd todo-app
+1. Clone the repository
+   
+    open bash/terminal
+
+    git clone (https://github.com/tiyafrancy/todo-list)
 
 2. Install dependencies
 
