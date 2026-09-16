@@ -1,0 +1,94 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #111287;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.controlsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .controlsSection {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.errorBanner {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+.warningBanner {
+    background-color: #fffbeb;
+    border: 1px solid #fef3c7;
+    color: #d97706;
+}
+
+.bannerButtonGroup {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.clearButton {
+    background-color: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+    padding: 0.25rem 0.625rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.clearButton:hover {
+    opacity: 0.75;
+}
+
+.clearButton:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.loadingMessage {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.95rem;
+    padding: 1.5rem 0;
+}
