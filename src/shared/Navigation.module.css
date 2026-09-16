@@ -24,8 +24,12 @@
 }
 
 .button:focus {
-    outline: 2px solid var(--primary);
-    border-color: var(--primary);
+    outline: none;
+}
+
+.button:focus-visible {
+    outline: none;
+    box-shadow: none;
 }
 
 .button:disabled {
