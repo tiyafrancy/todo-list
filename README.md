@@ -68,6 +68,8 @@ Follow these steps to set up and run the project locally on your machine.
 
 ### License Information
 
+This project is licensed under the [MIT License](LICENSE)
+
 ### Contact Information
 
 GitHub : https://github.com/tiyafrancy
