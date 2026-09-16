@@ -76,10 +76,6 @@ function TodosPage() {
                 credentials: 'include',
             });
 
-            // if(response.status === 401) {
-            //     throw new Error('Unauthorized access');
-            // }
-
             if(!response.ok) {
                 throw new Error('Failed to fetch todo list');
             }
