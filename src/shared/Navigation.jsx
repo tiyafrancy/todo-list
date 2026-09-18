@@ -5,32 +5,38 @@ import styles from "./Navigation.module.css";
 function Navigation() {
     const { isAuthenticated } = useAuth();
 
-    const getNavLinkClass = ({ isActive }) => `${styles.button} ${isActive ? styles.active : ""}`.trim();
+    const navLinkStyle = ({ isActive }) => 
+        isActive
+        ?{
+            fontWeight: 'bold',
+            textDecoration: 'underline',
+        }
+        : undefined;
 
     return (
         <nav>
             <ul className={styles.container}>
                 <li>
-                    <NavLink to="/about" className={getNavLinkClass}>
+                    <NavLink to="/about" className={styles.button} style={navLinkStyle}>
                         About
                     </NavLink>
                 </li>
                 {isAuthenticated ? (
                     <>
                         <li>
-                            <NavLink to="/todos" className={getNavLinkClass}>
+                            <NavLink to="/todos" className={styles.button} style={navLinkStyle}>
                                 Todos
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/profile" className={getNavLinkClass}>
+                            <NavLink to="/profile" className={styles.button} style={navLinkStyle}>
                                 Profile
                             </NavLink>
                         </li>
                     </>
                 ) : (
                     <li>
-                        <NavLink to="/login" className={getNavLinkClass}>
+                        <NavLink to="/login" cclassName={styles.button} style={navLinkStyle}>
                             Login 
                         </NavLink>
                     </li>

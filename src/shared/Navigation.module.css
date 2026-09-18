@@ -19,10 +19,6 @@
     cursor: pointer;
     transition: var(--transition);
     font-size: 0.9rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .button:hover {
@@ -38,9 +34,31 @@
     box-shadow: none;
 }
 
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .active {
     background-color: var(--primary);
     color: white;
     border-color: var(--primary);
-    font-weight: bold;
 }
+
+ .select {
+min-height: 44px;
+padding: 0.5rem 1rem;
+border: 1px solid #94a3b8;
+border-radius: 12px;
+background-color: var(--bg-card);
+font-size: 0.95rem;
+cursor: pointer;
+appearance: auto;
+-webkit-appearance: auto;
+}
+
+.select:focus {
+outline: 2px solid var(--primary);
+border-color: var(--primary);
+} 
+

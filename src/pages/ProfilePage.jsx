@@ -64,7 +64,7 @@ function ProfilePage(){
             <section className={styles.card}>
                 <h3 className={styles.cardTitle}>Account Details</h3>
                 <div className={styles.infoRow}>
-                    <span className={styles.infoLable}>Email</span>
+                    <span className={styles.infoLabel}>Email</span>
                     <span className={styles.infoValue}>{email}</span>
                 </div>
                 <div className={styles.infoRow}>
