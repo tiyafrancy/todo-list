@@ -15,7 +15,7 @@ function Navigation() {
 
     return (
         <nav>
-            <ul className={styles.container}>
+            <ul style={{ listStyle: 'none', display: 'flex', gap: '1rem', padding: 0 }}>
                 <li>
                     <NavLink to="/about" className={styles.button} style={navLinkStyle}>
                         About
@@ -36,7 +36,7 @@ function Navigation() {
                     </>
                 ) : (
                     <li>
-                        <NavLink to="/login" cclassName={styles.button} style={navLinkStyle}>
+                        <NavLink to="/login" className={styles.button} style={navLinkStyle}>
                             Login 
                         </NavLink>
                     </li>
